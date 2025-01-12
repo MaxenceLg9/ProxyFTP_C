@@ -20,7 +20,7 @@ int connect2Server(const char *serverName, const char *port, int *descSock) {
 	hints.ai_family = AF_UNSPEC;      // les adresses IPv4 et IPv6 seront présentées par
 	// la fonction getaddrinfo
 
-	//Récupération des informations sur le serveur
+	//Récupération des informations sur le serveu
 	ecode = getaddrinfo(serverName,port,&hints,&res);
 	if (ecode){
 		fprintf(stderr,"getaddrinfo: %s\n", gai_strerror(ecode));
@@ -32,7 +32,6 @@ int connect2Server(const char *serverName, const char *port, int *descSock) {
 	isConnected = false;
 
 	while(!isConnected && resPtr!=NULL){
-
 		//Création de la socket IPv4/TCP
 		*descSock = socket(resPtr->ai_family, resPtr->ai_socktype, resPtr->ai_protocol);
 		if (*descSock == -1) {
@@ -101,6 +100,7 @@ int createServerSocket() {
      // Free the memory allocated by getaddrinfo
      freeaddrinfo(res);
 
+	listen(sockfd, 5); // Listen for incoming connections
     // Print all network interfaces and their IPs
     struct ifaddrs *ifaddr;
     if (getifaddrs(&ifaddr) == -1) {

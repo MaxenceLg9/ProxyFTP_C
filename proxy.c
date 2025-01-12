@@ -7,6 +7,7 @@
 #include <netdb.h>
 #include "./simpleSocketAPI.h"
 #include "proxyapi.h"
+#include <errno.h>
 
 
 // Fonction pour gérer une session FTP
@@ -30,11 +31,11 @@ int main() {
     printf("Prêt à démarrer\n");
     // Boucle principale pour accepter les connexions
     while (!stop) {
-
+        // exit(0);
         const int clientSock = accept(serverSock, (struct sockaddr *) &clientAddr, &addrLen);
-        printf("Nouvelle connexion acceptée\n");
         if (clientSock < 0) {
-            perror("Erreur accept\n");
+            printf("Erreur accept : %s erro\n", strerror(errno));
+
             continue;
         }
         printf("Nouvelle connexion acceptée\n");
@@ -49,6 +50,7 @@ int main() {
             close(serverSock); // Le processus enfant n'a pas besoin de la socket d'écoute
             handleFTP(clientSock);
         } else {
+            // bind signal
             // Processus parent
             close(clientSock); // Le processus parent n'a pas besoin de cette connexion
         }
